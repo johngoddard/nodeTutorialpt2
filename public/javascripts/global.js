@@ -6,6 +6,7 @@ $(document).ready(() => {
   $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
   // Add user btn click listener
   $('#btnAddUser').on('click', addUser);
+  $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
 });
 
 function populateTable(){
@@ -20,7 +21,7 @@ function populateTable(){
       tableContent += '<tr>';
       tableContent += '<td><a href="#" class="linkshowuser" rel="' + this.username + '">' + this.username + '</a></td>'; 
       tableContent += '<td>' + this.email + '</td>';
-      tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
+      tableContent += `<td><a href="#" class="linkdeleteuser" rel="${this._id}">delete</a></td>`;
       tableContent += '</tr>';
     });
 
@@ -85,6 +86,29 @@ function addUser(event){
     });
   } else {
     alert("Please fill in all fields");
+    return false;
+  }
+}
+
+function deleteUser(event){
+  event.preventDefault();
+
+  const confirmation = confirm('Are you sure you want to delete this user?'); 
+  if(confirmation){
+    $.ajax({
+      type: 'DELETE', 
+      url: `/users/deleteuser/${$(this).attr('rel')}`
+    }).done(function(response){
+      if(response.msg === ''){
+
+      } else{
+        alert(`Error: ${response.msg}`);
+      }
+
+      populateTable();
+    });
+  } else{
+    // say no to confirmation
     return false;
   }
 }

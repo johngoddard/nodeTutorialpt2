@@ -19,4 +19,13 @@ router.post('/addUser', (req, res) => {
   });
 });
 
+router.delete('/deleteuser/:id', (req, res) => {
+  var db = req.db;
+  var collection = db.get('userlist');
+  let userToDelete = req.params.id;
+  collection.remove({'_id': userToDelete}, err => {
+    res.send((err === null) ? {msg: ''} : {msg: `error: ${err}`});
+  });
+});
+
 module.exports = router;
