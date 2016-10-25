@@ -9,4 +9,14 @@ router.get('/userlist', (req, res) => {
   });
 });
 
+router.post('/addUser', (req, res) => {
+  var db = req.db;
+  var collection = db.get('userlist');
+  collection.insert(req.body, (err, result) => {
+    res.send(
+      err === null ? {msg: ''} : {msg: err}
+    );
+  });
+});
+
 module.exports = router;
